@@ -818,7 +818,7 @@ int main(int argc, char **argv)
     char *tmpdev;
     char* debuggable;
 
-    // set child process exit signal handler
+    /* set child process exit signal handler */
     act.sa_handler = sigchld_handler;
     act.sa_flags = SA_NOCLDSTOP;
     act.sa_mask = 0;
@@ -871,13 +871,13 @@ int main(int argc, char **argv)
     action_for_each_trigger("early-init", action_add_queue_tail);
     drain_action_queue();
 
-    // Create sockete to interact for Uevent and Linux kernel
+    /* Create sockete to interact for Uevent and Linux kernel */
     INFO("device init\n");
     device_fd = device_init();
 
     property_init();
     
-    // only listen for keychords if ro.debuggable is true
+    /* only listen for keychords if ro.debuggable is true */
     keychord_fd = open_keychord();
 
     if (console[0]) {
@@ -890,9 +890,9 @@ int main(int argc, char **argv)
         have_console = 1;
     close(fd);
 
-    // Load startup image file
+    /* Load startup image file */
     if( load_565rle_image(INIT_IMAGE_FILE) ) {
-    // If load image file failed, will open /dev/tty0 device, and output "Android"
+    /* If load image file failed, will open /dev/tty0 device, and output "Android" */
     fd = open("/dev/tty0", O_WRONLY);
 
     if (fd >= 0) {
@@ -978,8 +978,8 @@ int main(int argc, char **argv)
         /* enable property triggers */   
     property_triggers_enabled = 1;     
 
-    // init care four things
-    ufds[0].fd = device_fd; // device_fd used to listen Uevent from kernel.
+    /* init process care four things */
+    ufds[0].fd = device_fd; /* device_fd used to listen Uevent from kernel */
     ufds[0].events = POLLIN;
     ufds[1].fd = property_set_fd;
     ufds[1].events = POLLIN;
@@ -988,7 +988,7 @@ int main(int argc, char **argv)
     fd_count = 3;
 
     if (keychord_fd > 0) {
-        // If keychord device initialize succeed, init also listen event from this device.
+        /* If keychord device initialize succeed, init also listen event from this device */
         ufds[3].fd = keychord_fd;
         ufds[3].events = POLLIN;
         fd_count++;

@@ -402,7 +402,7 @@ int parse_config_file(const char *fn)
     data = read_file(fn, 0);
     if (!data) return -1;
 
-    // Call parse_config to do real parse.
+    /* Call parse_config to do real parse. */
     parse_config(fn, data);
     DUMP();
     return 0;
@@ -603,7 +603,7 @@ static void *parse_service(struct parse_state *state, int nargs, char **args)
         return 0;
     }
     svc->name = args[1];
-    svc->classname = "default"; // Very important.
+    svc->classname = "default"; /* Very important. */
     memcpy(svc->args, args + 2, sizeof(char*) * nargs);
     svc->args[nargs] = 0;
     svc->nargs = nargs;
@@ -695,7 +695,8 @@ static void parse_line_service(struct parse_state *state, int nargs, char **args
         }
         break;
     case K_oneshot:
-        /* This is service's property, it totally has five properties:
+        /*
+         * This is service's property, it totally has five properties:
          * SVC_DISABLED: Don't startup with class
          * SVC_ONESHOT: Startup only once
          * SVC_RUNNING: Running, service's state

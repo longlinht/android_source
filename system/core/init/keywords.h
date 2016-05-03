@@ -30,7 +30,7 @@ int do_loglevel(int nargs, char **args);
 int do_device(int nargs, char **args);
 #define __MAKE_KEYWORD_ENUM__
 
-// K_symbol, symbol is keywords in init.rc
+/* K_symbol, symbol is keywords in init.rc */
 #define KEYWORD(symbol, flags, nargs, func) K_##symbol,
 enum {
     K_UNKNOWN,
