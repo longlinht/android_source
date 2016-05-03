@@ -127,7 +127,7 @@ done:
 static void service_start_if_not_disabled(struct service *svc)
 {
     if (!(svc->flags & SVC_DISABLED)) {
-        service_start(svc, NULL);
+        service_start(svc, NULL); // zygote could not set SVC_DISABLED
     }
 }
 

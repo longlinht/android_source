@@ -159,7 +159,17 @@ static int init_property_area(void)
     pa->version = PROP_AREA_VERSION;
 
         /* plug into the lib property services */
-    __system_property_area__ = pa;
+    __system_property_area__ = pa; //This variable is output by bionic libc
+    /*
+     * Property area is created by init process, Android hope other process
+     * either can acess this area.In order to acheive this, Android do two 
+     * below things:
+     * 1) Create property area on share memory
+     * 2) Using gcc constructor property to share this area with other process,
+     * this property pointer a function named __libc_prenit, when bionic libc 
+     * be loaded, will call this function automatically. In this function will 
+     * do the map job from share memory to local process
+     */
 
     return 0;
 }
@@ -355,6 +365,7 @@ void handle_property_set_fd(int fd)
     socklen_t addr_size = sizeof(addr);
     socklen_t cr_size = sizeof(cr);
 
+    // Accept tcp connection
     if ((s = accept(fd, (struct sockaddr *) &addr, &addr_size)) < 0) {
         return;
     }
@@ -366,6 +377,7 @@ void handle_property_set_fd(int fd)
         return;
     }
 
+    // Receive request data
     r = recv(s, &msg, sizeof(msg), 0);
     close(s);
     if(r != sizeof(prop_msg)) {
@@ -489,7 +501,9 @@ static void load_persistent_properties()
 
 void property_init(void)
 {
+    // Initialize property storage area
     init_property_area();
+    // Load default.prop file
     load_properties_from_file(PROP_PATH_RAMDISK_DEFAULT);
 }
 
@@ -497,8 +511,14 @@ int start_property_service(void)
 {
     int fd;
 
-    load_properties_from_file(PROP_PATH_SYSTEM_BUILD);
-    load_properties_from_file(PROP_PATH_SYSTEM_DEFAULT);
+    /*
+     *#define PROP_PATH_RAMDISK_DEFAULT  "/default.prop"
+     *#define PROP_PATH_SYSTEM_BUILD     "/system/build.prop"
+     *#define PROP_PATH_SYSTEM_DEFAULT   "/system/default.prop"
+     *#define PROP_PATH_LOCAL_OVERRIDE   "/data/local.prop"
+     */
+    load_properties_from_file(PROP_PATH_SYSTEM_BUILD);   
+    load_properties_from_file(PROP_PATH_SYSTEM_DEFAULT); 
     load_properties_from_file(PROP_PATH_LOCAL_OVERRIDE);
     /* Read persistent properties after all default values have been loaded. */
     load_persistent_properties();

@@ -203,6 +203,7 @@ void service_start(struct service *svc, const char *dynamic_args)
     pid = fork();
 
     if (pid == 0) {
+        // Runing in child process
         struct socketinfo *si;
         struct svcenvinfo *ei;
         char tmp[32];
@@ -221,6 +222,7 @@ void service_start(struct service *svc, const char *dynamic_args)
                                   SOCK_DGRAM : SOCK_STREAM,
                                   si->perm, si->uid, si->gid);
             if (s >= 0) {
+                // Add socket info to environment variable.
                 publish_socket(si->name, s);
             }
         }
@@ -262,6 +264,7 @@ void service_start(struct service *svc, const char *dynamic_args)
         }
 
         if (!dynamic_args) {
+            // Run /system/bin/app_process, this will enter app_process's main function
             if (execve(svc->args[0], (char**) svc->args, (char**) ENV) < 0) {
                 ERROR("cannot execve('%s'): %s\n", svc->args[0], strerror(errno));
             }
@@ -354,6 +357,7 @@ static int wait_for_one_process(int block)
     NOTICE("process '%s', pid %d exited\n", svc->name, pid);
 
     if (!(svc->flags & SVC_ONESHOT)) {
+        // zygote process kill all its children, so java world destroyed
         kill(-pid, SIGKILL);
         NOTICE("process '%s' killing any children in process group\n", svc->name);
     }
@@ -1015,6 +1019,7 @@ int main(int argc, char **argv)
             ufds[i].revents = 0;
 
         drain_action_queue();
+        // Here will restart all service flaged SVC_RESTARTING
         restart_processes();
 
         if (process_needs_restart) {

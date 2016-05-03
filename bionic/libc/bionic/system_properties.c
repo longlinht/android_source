@@ -72,6 +72,7 @@ int __system_properties_init(void)
     }
     sz = atoi(env + 1);
     
+    // Map the share memory created by init process to local process
     pa = mmap(0, sz, PROT_READ, MAP_SHARED, fd, 0);
     
     if(pa == MAP_FAILED) {
