@@ -1,0 +1,5 @@
+require board=trout
+reject serialno=HT7*|HT80*|HT81*
+require version-bootloader=1.33.2004|1.33.0004|0.95.3000|0.95.0000
+require version-baseband=2.22.23.02
+require version-cpld=4

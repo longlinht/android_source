@@ -1,0 +1,5 @@
+reject serialno=HT7*|HT80*|HT81*
+require board=sapphire
+require version-bootloader=1.33.0011|1.33.2011|1.33.3011|1.33.0013|1.33.2013|1.33.3013
+require version-baseband=2.22.28.25
+require version-cpld=10|12
