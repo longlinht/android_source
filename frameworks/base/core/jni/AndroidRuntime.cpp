@@ -544,6 +544,7 @@ int AndroidRuntime::startVm(JavaVM** pJavaVM, JNIEnv** pEnv)
     } executionMode = kEMDefault;
 
 
+    // Set JNI check, JNI check is some check job when Native call java methods
     property_get("dalvik.vm.checkjni", propBuf, "");
     if (strcmp(propBuf, "true") == 0) {
         checkJni = true;
@@ -602,6 +603,7 @@ int AndroidRuntime::startVm(JavaVM** pJavaVM, JNIEnv** pEnv)
     mOptions.add(opt);
     //options[curOpt++].optionString = "-verbose:class";
 
+    // Set heap size, default is 16M
     strcpy(heapsizeOptsBuf, "-Xmx");
     property_get("dalvik.vm.heapsize", heapsizeOptsBuf+4, "16m");
     //LOGI("Heap size: %s", heapsizeOptsBuf);
@@ -891,6 +893,7 @@ bail:
  */
 void AndroidRuntime::start(const char* className, const bool startSystemServer)
 {
+    // className's value is "com.android.internal.os.ZygoteInit"
     LOGD("\n>>>>>>>>>>>>>> AndroidRuntime START <<<<<<<<<<<<<<\n");
 
     char* slashClassName = NULL;
@@ -947,13 +950,16 @@ void AndroidRuntime::start(const char* className, const bool startSystemServer)
 
     stringClass = env->FindClass("java/lang/String");
     assert(stringClass != NULL);
+    // Create a java String array which has two elements, like 'String strArray[] = new String[2]'
     strArray = env->NewObjectArray(2, stringClass, NULL);
     assert(strArray != NULL);
     classNameStr = env->NewStringUTF(className);
     assert(classNameStr != NULL);
+    // Set first element "com.android.internal.os.ZygoteInit"
     env->SetObjectArrayElement(strArray, 0, classNameStr);
     startSystemServerStr = env->NewStringUTF(startSystemServer ? 
                                                  "true" : "false");
+    // Set second element "true"
     env->SetObjectArrayElement(strArray, 1, startSystemServerStr);
 
     /*
@@ -964,6 +970,7 @@ void AndroidRuntime::start(const char* className, const bool startSystemServer)
     jmethodID startMeth;
 
     slashClassName = strdup(className);
+    // Replace "com.android.internal.os.ZygoteInit" by "com/android/internal/os/ZygoteInit"
     for (cp = slashClassName; *cp != '\0'; cp++)
         if (*cp == '.')
             *cp = '/';
@@ -973,12 +980,18 @@ void AndroidRuntime::start(const char* className, const bool startSystemServer)
         LOGE("JavaVM unable to locate class '%s'\n", slashClassName);
         /* keep going */
     } else {
+        // Find Zygote class's static main function jMethodId
         startMeth = env->GetStaticMethodID(startClass, "main",
             "([Ljava/lang/String;)V");
         if (startMeth == NULL) {
             LOGE("JavaVM unable to find main() in '%s'\n", className);
             /* keep going */
         } else {
+            /* Call java method through JNI, main method is called,
+             * class is com.android.internal.os.ZygoteInit, passing 
+             * argments is "com.android.internal.os.ZygoteInit true"
+             * After this call, zygote enter the Java world.
+             */
             env->CallStaticVoidMethod(startClass, startMeth, strArray);
 
 #if 0

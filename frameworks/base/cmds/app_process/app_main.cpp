@@ -117,6 +117,10 @@ static void setArgv0(const char *argv0, const char *newArgv0)
 
 int main(int argc, const char* const argv[])
 {
+    /* This process forked from init process, startup argments
+     * from init.rc is 
+     * -Xzygote /system/bin --zygote --start-system-server
+     */
     // These are global variables in ProcessState.cpp
     mArgC = argc;
     mArgV = argv;
