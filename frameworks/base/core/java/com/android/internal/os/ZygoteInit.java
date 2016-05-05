@@ -573,11 +573,19 @@ public class ZygoteInit {
             // Start profiling the zygote initialization.
             SamplingProfilerIntegration.start();
 
+            /*
+             * Zygote process communicate with other process using
+             * AF_UNIX socket, not Binder
+             */
             registerZygoteSocket();
             EventLog.writeEvent(LOG_BOOT_PROGRESS_PRELOAD_START,
                 SystemClock.uptimeMillis());
             preloadClasses();
             //cacheRegisterMaps();
+            /* 
+             * This method maybe take long time to execute,
+             * It could make Android system startup very slow
+             */
             preloadResources();
             EventLog.writeEvent(LOG_BOOT_PROGRESS_PRELOAD_END,
                 SystemClock.uptimeMillis());
@@ -598,7 +606,7 @@ public class ZygoteInit {
             }
 
             if (argv[1].equals("true")) {
-                startSystemServer();
+                startSystemServer(); // Start system_server process
             } else if (!argv[1].equals("false")) {
                 throw new RuntimeException(argv[0] + USAGE_STRING);
             }
@@ -608,12 +616,12 @@ public class ZygoteInit {
             if (ZYGOTE_FORK_MODE) {
                 runForkMode();
             } else {
-                runSelectLoopMode();
+                runSelectLoopMode(); // zygote call this method
             }
 
             closeServerSocket();
         } catch (MethodAndArgsCaller caller) {
-            caller.run();
+            caller.run(); // Very important
         } catch (RuntimeException ex) {
             Log.e(TAG, "Zygote died with exception", ex);
             closeServerSocket();
@@ -706,11 +714,13 @@ public class ZygoteInit {
             if (index < 0) {
                 throw new RuntimeException("Error in select()");
             } else if (index == 0) {
+                // ZygoteConnection stands for a client in Zygote
                 ZygoteConnection newPeer = acceptCommandPeer();
                 peers.add(newPeer);
                 fds.add(newPeer.getFileDesciptor());
             } else {
                 boolean done;
+                // Here deal with client requests
                 done = peers.get(index).runOnce();
 
                 if (done) {
