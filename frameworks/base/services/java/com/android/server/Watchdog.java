@@ -390,6 +390,7 @@ public class Watchdog extends Thread {
 
     private Watchdog() {
         super("watchdog");
+        // Construct a handler, deal with message in handleMesssage
         mHandler = new HeartbeatHandler();
         mGlobalPssCollected = new GlobalPssCollected();
     }

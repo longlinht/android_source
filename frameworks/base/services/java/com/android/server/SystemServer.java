@@ -104,6 +104,7 @@ class ServerThread extends Thread {
         // Critical services...
         try {
             Slog.i(TAG, "Entropy Service");
+            // Startup Entroy service
             ServiceManager.addService("entropy", new EntropyService());
 
             Slog.i(TAG, "Power Manager");
@@ -161,6 +162,7 @@ class ServerThread extends Thread {
             ServiceManager.addService(Context.ALARM_SERVICE, alarm);
 
             Slog.i(TAG, "Init Watchdog");
+            // Watchdog initialization
             Watchdog.getInstance().init(context, battery, power, alarm,
                     ActivityManagerService.self());
 
@@ -503,6 +505,7 @@ class ServerThread extends Thread {
             }
         });
 
+        // Enter message loop
         Looper.loop();
         Slog.d(TAG, "System ServerThread is exiting!");
     }
@@ -571,7 +574,9 @@ public class SystemServer
         // as efficient as possible with its memory usage.
         VMRuntime.getRuntime().setTargetHeapUtilization(0.8f);
         
+        // Load libandroid_servers.so
         System.loadLibrary("android_servers");
+        // Call native init1 function
         init1(args);
     }
 
@@ -579,6 +584,6 @@ public class SystemServer
         Slog.i(TAG, "Entered the Android system server!");
         Thread thr = new ServerThread();
         thr.setName("android.server.ServerThread");
-        thr.start();
+        thr.start(); // Start a ServerThread
     }
 }

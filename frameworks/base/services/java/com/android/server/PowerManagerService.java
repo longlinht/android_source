@@ -2595,6 +2595,7 @@ class PowerManagerService extends IPowerManager.Stub
     }
 
     public void monitor() {
+        // Check whether the Service is deadlocked
         synchronized (mLocks) { }
     }
 

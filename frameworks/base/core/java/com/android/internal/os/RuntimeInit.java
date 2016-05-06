@@ -261,6 +261,11 @@ public class RuntimeInit {
         System.setErr(new AndroidPrintStream(Log.WARN, "System.err"));
 
         commonInit();
+
+        /* 
+         * Native level initialize, after this call, SS will contact with 
+         * other process use Binder
+         */
         zygoteInitNative();
 
         int curArg = 0;
@@ -290,6 +295,7 @@ public class RuntimeInit {
         String[] startArgs = new String[argv.length - curArg];
 
         System.arraycopy(argv, curArg, startArgs, 0, startArgs.length);
+        // Here call system_server's main method
         invokeStaticMain(startClass, startArgs);
     }
 

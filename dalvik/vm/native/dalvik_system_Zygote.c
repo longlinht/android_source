@@ -507,6 +507,7 @@ static void Dalvik_dalvik_system_Zygote_forkSystemServer(
          */
         if (waitpid(pid, &status, WNOHANG) == pid) {
             LOGE("System server process %d has died. Restarting Zygote!", pid);
+            // If system_server process died, Zygote will kill itself
             kill(getpid(), SIGKILL);
         }
     }

@@ -420,6 +420,7 @@ public class Process {
 
         int pid;
 
+        // Open socket which used to communicate with Zygote process
         openZygoteSocketIfNeeded();
 
         try {

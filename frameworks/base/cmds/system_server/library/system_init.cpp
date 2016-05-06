@@ -97,6 +97,7 @@ extern "C" status_t system_init()
     AndroidRuntime* runtime = AndroidRuntime::getRuntime();
 
     LOGI("System server: starting Android services.\n");
+    // Call com.android.server.SystemServer class's init2 method
     runtime->callStatic("com/android/server/SystemServer", "init2");
         
     // If running in our own process, just go into the thread

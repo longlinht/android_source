@@ -509,6 +509,7 @@ public class ZygoteInit {
             ZygoteConnection.Arguments parsedArgs)
             throws ZygoteInit.MethodAndArgsCaller {
 
+        // Close socket inherited from Zygote
         closeServerSocket();
 
         /*

@@ -80,6 +80,7 @@ public:
         sp<ProcessState> proc = ProcessState::self();
         if (proc->supportsProcesses()) {
             LOGV("App process: starting thread pool.\n");
+            // Startup a thread to use Binder communication.
             proc->startThreadPool();
         }       
     }
