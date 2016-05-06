@@ -57,7 +57,7 @@ class MyMediaScannerClient : public MediaScannerClient
 public:
     MyMediaScannerClient(JNIEnv *env, jobject client)
         :   mEnv(env),
-            mClient(env->NewGlobalRef(client)),
+            mClient(env->NewGlobalRef(client)), // Create a Global Reference
             mScanFileMethodID(0),
             mHandleStringTagMethodID(0),
             mSetMimeTypeMethodID(0)
@@ -87,6 +87,7 @@ public:
     virtual bool scanFile(const char* path, long long lastModified, long long fileSize)
     {
         jstring pathStr;
+        // Create a Local Reference type jstring
         if ((pathStr = mEnv->NewStringUTF(path)) == NULL) return false;
 
         mEnv->CallVoidMethod(mClient, mScanFileMethodID, pathStr, lastModified, fileSize);
@@ -183,6 +184,10 @@ android_media_MediaScanner_processDirectory(JNIEnv *env, jobject thiz, jstring p
     env->ReleaseStringUTFChars(extensions, extensionsStr);
 }
 
+/*
+ * 2nd param is stands for a MediaScanner object in Java layer
+ *
+ */
 static void
 android_media_MediaScanner_processFile(JNIEnv *env, jobject thiz, jstring path, jstring mimeType, jobject client)
 {

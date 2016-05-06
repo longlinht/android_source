@@ -678,6 +678,10 @@ status_t Thread::run(const char* name, int32_t priority, size_t stack)
     mRunning = true;
 
     bool res;
+    /*
+     * if mCanCallJava is true, before call your thread function,
+     * will attach to JNI environment, so you can call JNI function
+     */
     if (mCanCallJava) {
         res = createThreadEtc(_threadLoop,
                 this, name, priority, stack, &mThread);

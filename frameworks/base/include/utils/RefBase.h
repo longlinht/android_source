@@ -115,7 +115,9 @@ protected:
     
     //! Flags for extendObjectLifetime()
     enum {
+        // Object deleted only when strong reference and week reference count both are 0
         OBJECT_LIFETIME_WEAK    = 0x0001,
+        // Out control of reference count
         OBJECT_LIFETIME_FOREVER = 0x0003
     };
     

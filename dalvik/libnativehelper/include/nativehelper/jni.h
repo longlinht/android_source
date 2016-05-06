@@ -125,9 +125,9 @@ typedef enum jobjectRefType {
 } jobjectRefType;
 
 typedef struct { 
-    const char* name; 
-    const char* signature; 
-    void*       fnPtr; 
+    const char* name; // native function name in Java 
+    const char* signature; // Java method's signature, include parameters type and return value type
+    void*       fnPtr; // function pointer in JNI layer
 } JNINativeMethod;
 
 struct _JNIEnv;

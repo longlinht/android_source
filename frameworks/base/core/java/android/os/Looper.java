@@ -69,6 +69,7 @@ public class Looper {
       * {@link #quit()}.
       */
     public static final void prepare() {
+        // One Looper only call prepare once.
         if (sThreadLocal.get() != null) {
             throw new RuntimeException("Only one Looper may be created per thread");
         }

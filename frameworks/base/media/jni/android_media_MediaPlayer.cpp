@@ -761,6 +761,10 @@ extern int register_android_media_AmrInputStream(JNIEnv *env);
 
 jint JNI_OnLoad(JavaVM* vm, void* reserved)
 {
+    /*
+     * JavaVM is stand for a VM in JNI layer, every java process
+     * only has a JavaVM
+     */
     JNIEnv* env = NULL;
     jint result = -1;
 
