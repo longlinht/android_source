@@ -488,6 +488,10 @@ status_t IPCThreadState::transact(int32_t handle,
     if (err == NO_ERROR) {
         LOG_ONEWAY(">>>> SEND from pid %d uid %d %s", getpid(), getuid(),
             (flags & TF_ONE_WAY) == 0 ? "READ REPLY" : "ONE WAY");
+        /* 
+         * BC_TRANSACTION is a message code for application send message to binder device,
+         * message code for binder device send to application is prefix BR
+         */ 
         err = writeTransactionData(BC_TRANSACTION, flags, handle, code, data, NULL);
     }
     
@@ -705,6 +709,7 @@ status_t IPCThreadState::talkWithDriver(bool doReceive)
 {
     LOG_ASSERT(mProcess->mDriverFD >= 0, "Binder driver is not opened");
     
+    // Data structure for switching data with binder device
     binder_write_read bwr;
     
     // Is the read buffer empty?
@@ -799,8 +804,10 @@ status_t IPCThreadState::talkWithDriver(bool doReceive)
 status_t IPCThreadState::writeTransactionData(int32_t cmd, uint32_t binderFlags,
     int32_t handle, uint32_t code, const Parcel& data, status_t* statusBuffer)
 {
+    // Data structure for communicate with binder device
     binder_transaction_data tr;
 
+    // 0 is flag of ServiceManager
     tr.target.handle = handle;
     tr.code = code;
     tr.flags = binderFlags;

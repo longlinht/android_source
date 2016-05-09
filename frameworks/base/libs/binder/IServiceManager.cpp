@@ -157,6 +157,7 @@ public:
         data.writeInterfaceToken(IServiceManager::getInterfaceDescriptor());
         data.writeString16(name);
         data.writeStrongBinder(service);
+        // remote() return BpBinder object
         status_t err = remote()->transact(ADD_SERVICE_TRANSACTION, data, &reply);
         return err == NO_ERROR ? reply.readInt32() : err;
     }

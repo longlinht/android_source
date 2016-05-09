@@ -362,7 +362,7 @@ static int open_driver()
 
 ProcessState::ProcessState()
     : mDriverFD(open_driver())
-    , mVMStart(MAP_FAILED)
+    , mVMStart(MAP_FAILED) // Map the memory start address
     , mManagesContexts(false)
     , mBinderContextCheckFunc(NULL)
     , mBinderContextUserData(NULL)

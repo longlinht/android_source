@@ -91,6 +91,10 @@ struct binder_state
     unsigned mapsize;
 };
 
+/*
+ * 1) Open binder device 
+ * 2) Memory map
+ */
 struct binder_state *binder_open(unsigned mapsize)
 {
     struct binder_state *bs;

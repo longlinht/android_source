@@ -249,6 +249,7 @@ int svcmgr_handler(struct binder_state *bs,
 int main(int argc, char **argv)
 {
     struct binder_state *bs;
+    //  BINDER_SERVICE_MANAGER is NULL, is a magic number
     void *svcmgr = BINDER_SERVICE_MANAGER;
 
     bs = binder_open(128*1024);
