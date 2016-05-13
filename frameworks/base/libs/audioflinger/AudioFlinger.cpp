@@ -121,6 +121,7 @@ static bool settingsAllowed() {
 
 // ----------------------------------------------------------------------------
 
+// mAudioHardware stand for a HAL object
 AudioFlinger::AudioFlinger()
     : BnAudioFlinger(),
         mAudioHardware(0), mMasterVolume(1.0f), mMasterMute(false), mNextThreadId(0)

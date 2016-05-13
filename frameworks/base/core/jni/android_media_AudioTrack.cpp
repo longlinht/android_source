@@ -755,13 +755,19 @@ static jint android_media_AudioTrack_get_min_buff_size(JNIEnv *env,  jobject thi
     int afFrameCount;
     uint32_t afLatency;
     
+    // Query sampling rate, return the biggest sampling rate
     if (AudioSystem::getOutputSamplingRate(&afSamplingRate) != NO_ERROR) {
         return -1;
     }
+    /* 
+     * Query hardware internal buffer size, unit is frame
+     * 1 frame = bytes of 1 sampling point * channel count
+     */
     if (AudioSystem::getOutputFrameCount(&afFrameCount) != NO_ERROR) {
         return -1;
     }
     
+    // Query hardware latency 
     if (AudioSystem::getOutputLatency(&afLatency) != NO_ERROR) {
         return -1;
     }
