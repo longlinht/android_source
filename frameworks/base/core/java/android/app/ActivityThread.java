@@ -2676,6 +2676,7 @@ public final class ActivityThread {
 
         if (localLOGV) Slog.v(
             TAG, "Handling launch of " + r);
+        // This activity is the Activity in App
         Activity a = performLaunchActivity(r, customIntent);
 
         if (a != null) {
