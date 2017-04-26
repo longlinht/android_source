@@ -6,4 +6,8 @@ This is a repository for deep into Android OS. While I read source code, I would
 
 This repository hold complete Android source code. It can be compiled and run image file in emulator.
 
+## Reading Code Notes
+
+
+
 
