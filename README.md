@@ -4,7 +4,7 @@ This is a repository for deep into Android OS. While I read source code, I would
 
 ## Android Source Code
 
-This repository hold complete Android source code. It can be compiled and run image file in emulator.
+This repository hold complete Android source code(Froyo). It can be compiled and run image file in emulator.
 
 ## Reading Code Notes
 
