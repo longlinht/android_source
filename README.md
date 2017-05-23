@@ -14,7 +14,11 @@ It makes Java methods and Native mehtods can call each other.
 
 * Example
 
+```
+
 Java(MediaScanner) <---> JNI(libmeida_jni.so) <---> Native(libmedia.so)
+
+```
 
 **JNI must implemented by dynamic library**
 
@@ -109,6 +113,18 @@ static JNINativeMethod gMethods[] = {
 };
 
 ```
+
+* `JNI_OnLoad` function
+
+When java layer load JNI dynamic library finish, then call `JNI_OnLoad` function, the dynamic register complete here.
+
+
+* JNIEnv - A structure stand for JNI environment relate to thread
+
+    * Operate jobject through JNIEnv
+
+
+
 
 
 
