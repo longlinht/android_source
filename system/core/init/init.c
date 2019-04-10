@@ -985,9 +985,9 @@ int main(int argc, char **argv)
     /* init process care four things */
     ufds[0].fd = device_fd; /* device_fd used to listen Uevent from kernel */
     ufds[0].events = POLLIN;
-    ufds[1].fd = property_set_fd;
+    ufds[1].fd = property_set_fd; // used to listen event from property server
     ufds[1].events = POLLIN;
-    ufds[2].fd = signal_recv_fd;
+    ufds[2].fd = signal_recv_fd; // used to listen event from socket
     ufds[2].events = POLLIN;
     fd_count = 3;
 
